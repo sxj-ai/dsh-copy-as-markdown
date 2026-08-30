@@ -28,6 +28,30 @@ dev_install_package {"dir": "C:/Users/86134/.dsh/plugins/dsh-copy-as-markdown"}
 `"@dsh-external/dsh-copy-as-markdown": "link:C:/Users/86134/.dsh/plugins/dsh-copy-as-markdown"`，
 然后重建 `profiles/web/node_modules` 下的 junction 或重新 `npm install`，重启 `dsh web`。
 
+## 本地更新与 GitHub 同步
+
+仓库根目录自带两个辅助脚本（只影响 Git 提交，不影响插件运行）：
+
+- `.\sync.ps1 "更新说明"` —— **手动一键**：自动 `git add + commit + push`，推荐日常使用；
+  不带参数时自动生成时间戳提交信息；没有改动时会提示已一致。
+- `.\watch.ps1` —— **全自动**：挂在后台，每 3 秒检测改动，发现改动自动提交并推送
+  （Ctrl+C 停止；推送失败会自动重试）。注意：全自动会把调试过程中的中间改动也提交，
+  想要"满意了再存档"请用 `sync.ps1`。
+
+也可以在仓库根目录执行 `git sync "更新说明"`（等效于 `.\sync.ps1`，本机已配置该别名）。
+
+检查本地与 GitHub 是否一致：
+
+```powershell
+git status
+# 显示 "Your branch is up to date with 'origin/main'" 且 "nothing to commit, working tree clean"
+# = 本地与 GitHub 完全一致
+```
+
+查看历史：`git log --oneline --graph -10`，或在 GitHub 仓库页面的 **Commits** 标签查看。
+
+回滚已发布的内容：`git revert <提交号>`（生成反向提交、保留历史，最安全）。
+
 ## 结构
 
 ```
